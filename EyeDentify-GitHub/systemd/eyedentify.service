@@ -1,0 +1,17 @@
+[Unit]
+Description=EyeDentify assistive glasses
+After=network-online.target sound.target bluetooth.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/EyeDentify
+ExecStart=/home/pi/EyeDentify/.venv/bin/eyedentify --config /home/pi/EyeDentify/config.yaml
+Restart=on-failure
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+

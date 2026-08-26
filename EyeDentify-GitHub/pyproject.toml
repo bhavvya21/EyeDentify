@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eyedentify"
+version = "1.0.0"
+description = "Dual-mode assistive glasses for Raspberry Pi 5"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = ["numpy>=1.24", "opencv-python-headless>=4.8", "PyYAML>=6.0"]
+
+[project.optional-dependencies]
+pi = ["gpiozero>=2.0", "lgpio>=0.2.2", "pytesseract>=0.3.10", "Pillow>=10.0", "tflite-runtime>=2.14; python_version<'3.12'"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+eyedentify = "eyedentify.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+

@@ -1,0 +1,30 @@
+mode:
+  switch_gpio: 17
+  reading_when_high: true
+camera:
+  index: 0
+  width: 640
+  height: 480
+detection:
+  model: models/detect.tflite
+  labels: models/labelmap.txt
+  score_threshold: 0.55
+  announce_cooldown_seconds: 2.5
+  center_band: 0.34
+  max_results: 5
+distance:
+  trigger_gpio: 23
+  echo_gpio: 24
+  max_meters: 4.0
+  step_length_meters: 0.75
+reading:
+  language: eng
+  interval_seconds: 5.0
+  min_characters: 3
+speech:
+  rate: 175
+  volume: 100
+runtime:
+  simulation: false
+  log_level: INFO
+
