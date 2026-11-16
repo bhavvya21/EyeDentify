@@ -8,6 +8,14 @@ The hosted workspace currently requires its owner's ChatGPT account. The Raspber
 
 ## Website
 
+Website source is in [`website/`](website/). To run it locally from PowerShell with Python 3 installed:
+
+```powershell
+py -m http.server 8000 --bind 127.0.0.1 --directory website
+```
+
+Open `http://localhost:8000`. See [website instructions](website/README.md) for details.
+
 - Overview and Eyedentify dashboard with empty observation panels until hardware data is available.
 - Permission-based browser camera preview; frames are not uploaded or recorded by the app.
 - Reading studio with pasted text, `.txt` import, browser speech and adjustable reading speed.
@@ -135,7 +143,7 @@ The automated suite tests direction mapping, distance-to-step conversion, messag
 
 ## Repository map
 
-Application paths below are relative to `EyeDentify-GitHub/`. Website screenshots and the circuit diagram are in the root `docs/` directory. The hosted frontend is maintained separately from this hardware repository.
+Application paths below are relative to `EyeDentify-GitHub/`. Website source is in `website/`; screenshots and the circuit diagram are in `docs/`. The live Sites deployment is published separately from GitHub pushes.
 
 - `src/eyedentify/`: application, inference, OCR, GPIO, speech, and business logic
 - `tests/`: hardware-free automated tests

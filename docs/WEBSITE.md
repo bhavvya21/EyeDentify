@@ -2,6 +2,8 @@
 
 [Open the workspace](https://eyedentify-senseai.me-ed0430495.chatgpt.site).
 
+The frontend source is in [`../website/`](../website/), with [PowerShell instructions](../website/README.md). Updating GitHub does not automatically republish the live Sites deployment.
+
 ## Current interface
 
 The site contains Overview, Eyedentify dashboard, Reading studio, Sessions and Preferences. Device setup has been removed. The dashboard leaves observations empty when a data source is unavailable; it does not populate readings automatically.
