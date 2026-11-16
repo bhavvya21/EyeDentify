@@ -1,4 +1,32 @@
-# EyeDentify
+# Eyedentify
+
+Assistive glasses powered by Raspberry Pi 5, with a companion web workspace for visual context and spoken reading.
+
+[Open the Eyedentify workspace](https://eyedentify-senseai.me-ed0430495.chatgpt.site) · [Circuit diagram](docs/hardware/eyedentify-circuit.png) · [Website documentation](docs/WEBSITE.md)
+
+The hosted workspace currently requires its owner's ChatGPT account. The Raspberry Pi software runs separately from the website; a live telemetry connection is not yet implemented.
+
+## Website
+
+- Overview and Eyedentify dashboard with empty observation panels until hardware data is available.
+- Permission-based browser camera preview; frames are not uploaded or recorded by the app.
+- Reading studio with pasted text, `.txt` import, browser speech and adjustable reading speed.
+- Session-history interface, currently empty without a connected data source.
+- Larger text, higher contrast and reduced-motion preferences stored in the browser.
+
+Browser camera preview does not perform object detection or OCR. The device runtime below supplies those capabilities on the Raspberry Pi. Environmental audio classification and IMU readings require additional hardware/software integration.
+
+### Overview
+
+![Eyedentify overview with assistive-glasses artwork and dashboard navigation](docs/screenshots/01-overview.png)
+
+### Visual context and sensor workspace
+
+![Eyedentify visual context panel and separate audio, proximity and movement areas](docs/screenshots/02-context-dashboard.png)
+
+These supplied screenshots capture an earlier UI revision. The Device setup navigation entry and hardware shortcut shown in them have since been removed from the hosted website. Unconnected sensor fields remain empty.
+
+## Raspberry Pi software
 
 Raspberry Pi 5 software for dual-mode assistive glasses:
 
@@ -18,6 +46,14 @@ Raspberry Pi 5 software for dual-mode assistive glasses:
 - Bluetooth speaker or bone-conduction headset
 - Stable 5 V / 5 A Pi 5 supply or suitable USB-C power bank
 
+### Circuit diagram
+
+![Eyedentify circuit: Raspberry Pi 5, USB camera, HC-SR04 with ECHO voltage divider, mode switch, Bluetooth audio and USB-C power](docs/hardware/eyedentify-circuit.png)
+
+This is a functional wiring diagram, not a physical header orientation guide. Pin numbers below are physical header positions; GPIO names use BCM numbering. Wire crossings without junction dots are not connected. The slide switch common goes to GPIO17; one throw goes to 3.3 V and the other is left unconnected. The software enables GPIO17's internal pull-down.
+
+References: [Raspberry Pi GPIO documentation](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html) and [GPIO Zero distance-sensor wiring](https://gpiozero.readthedocs.io/en/rtd/api_input.html#distancesensor).
+
 ### Wiring (BCM numbering)
 
 | Device | Raspberry Pi |
@@ -34,8 +70,8 @@ Never connect HC-SR04 ECHO directly to a Pi GPIO; its 5 V output can damage the 
 ## Install on Raspberry Pi 5
 
 ```bash
-git clone https://github.com/YOUR-USER/EyeDentify.git
-cd EyeDentify
+git clone https://github.com/bhavvya21/EyeDentify.git
+cd EyeDentify/EyeDentify-GitHub
 chmod +x scripts/install_pi.sh
 ./scripts/install_pi.sh
 ```
@@ -62,7 +98,9 @@ v4l2-ctl --list-devices
 .venv/bin/python -c "import cv2; c=cv2.VideoCapture(0); print(c.isOpened(), c.read()[0]); c.release()"
 
 # OCR
-echo 'CAUTION WET FLOOR' | tesseract stdin stdout
+tesseract --version
+# For a real OCR check, provide an image containing text:
+tesseract /path/to/text-image.png stdout
 
 # Audio (pair/select the Bluetooth device in Raspberry Pi OS first)
 espeak-ng 'EyeDentify audio test'
@@ -75,7 +113,7 @@ Check the measured distance against a tape measure at 0.5 m, 1 m, and 2 m. Tune 
 
 ## Run automatically at boot
 
-The supplied service assumes the repository is `/home/pi/EyeDentify` and user is `pi`. Edit it if different.
+The supplied service uses user `pi` and paths under `/home/pi/EyeDentify`. This repository stores the Python application in `EyeDentify-GitHub/`: update the service's `WorkingDirectory` to `/home/pi/EyeDentify/EyeDentify-GitHub`, and update `ExecStart` to use that folder's `.venv/bin/eyedentify` executable and `config.yaml` file. Use your actual username and checkout path before enabling it.
 
 ```bash
 sudo cp systemd/eyedentify.service /etc/systemd/system/
@@ -96,6 +134,8 @@ python -m venv .venv
 The automated suite tests direction mapping, distance-to-step conversion, message composition, mode switching, OCR-mode output, and repeat-announcement cooldown without requiring Pi hardware.
 
 ## Repository map
+
+Application paths below are relative to `EyeDentify-GitHub/`. Website screenshots and the circuit diagram are in the root `docs/` directory. The hosted frontend is maintained separately from this hardware repository.
 
 - `src/eyedentify/`: application, inference, OCR, GPIO, speech, and business logic
 - `tests/`: hardware-free automated tests

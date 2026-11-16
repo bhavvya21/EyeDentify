@@ -1,5 +1,7 @@
 # EyeDentify
 
+See the [project README](../README.md) for website screenshots, current capability status and the [circuit diagram](../docs/hardware/eyedentify-circuit.png).
+
 Raspberry Pi 5 software for dual-mode assistive glasses:
 
 - **Detection mode:** camera-based COCO object recognition, left/center/right positioning, and HC-SR04 distance converted to an approximate step count.
@@ -34,8 +36,8 @@ Never connect HC-SR04 ECHO directly to a Pi GPIO; its 5 V output can damage the 
 ## Install on Raspberry Pi 5
 
 ```bash
-git clone https://github.com/YOUR-USER/EyeDentify.git
-cd EyeDentify
+git clone https://github.com/bhavvya21/EyeDentify.git
+cd EyeDentify/EyeDentify-GitHub
 chmod +x scripts/install_pi.sh
 ./scripts/install_pi.sh
 ```
@@ -62,7 +64,8 @@ v4l2-ctl --list-devices
 .venv/bin/python -c "import cv2; c=cv2.VideoCapture(0); print(c.isOpened(), c.read()[0]); c.release()"
 
 # OCR
-echo 'CAUTION WET FLOOR' | tesseract stdin stdout
+tesseract --version
+tesseract /path/to/text-image.png stdout
 
 # Audio (pair/select the Bluetooth device in Raspberry Pi OS first)
 espeak-ng 'EyeDentify audio test'
@@ -75,7 +78,7 @@ Check the measured distance against a tape measure at 0.5 m, 1 m, and 2 m. Tune 
 
 ## Run automatically at boot
 
-The supplied service assumes the repository is `/home/pi/EyeDentify` and user is `pi`. Edit it if different.
+Before enabling the service, adjust its `User`, `WorkingDirectory`, executable and `--config` path to your installation. This repository stores the application in `EyeDentify-GitHub/`; see the root README for the expected paths.
 
 ```bash
 sudo cp systemd/eyedentify.service /etc/systemd/system/
